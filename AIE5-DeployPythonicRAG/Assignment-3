@@ -1,0 +1,61 @@
+Q1. Why do we want to support streaming? What about streaming is important, or useful?
+
+1. Real-time data ingestion and processing:
+Streaming is important because it enables real-time data ingestion and processing, allowing the model to generate responses based on the most up-to-date information, leading to more accurate and relevant outputs, especially in situations where data is constantly changing or being updated rapidly.
+2. Faster Response Time (Reduced Latency):
+Instead of waiting for the entire response to be generated, streaming allows the system to send parts of the response as soon as they are available. This provides users with immediate feedback and a perception of faster processing.
+
+3. Allows processing in parallel:
+It allows processing in parallel, reducing memory overhead, as only portions of the response are held in memory at a given time rather than the entire output. This is particularly useful when dealing with large documents or complex queries.
+4. Improved Scalability:
+Streaming can help scale applications more effectively by spreading computation over time, which reduces peak resource usage and enhances system stability.
+
+Q2. Why are we using User Session here? What about Python makes us need to use this? Why not just store everything in a global variable?
+The user session is designed to persist data in memory through the life cycle of a chat session. Each user session is unique to a user and a given chat session. The basic purpose of User Session is to not let the context of a chat conversation which was initiated with user 1 (let’s say) get spilled over to a chat conversation which was initiated with user 2 which will ultimately lead to User 2 getting incorrect answers. In our current code if you open two different windows for our deployed chat prompt on your browser and ask a question on window 1 and ask a follow-up question in window 2 then you won’t be able to get a correct response in window 2 of your browser. Every user session is associated with an unique numerical ID and that is relevant until the user session expires. This approach is crucial in multi-user environments, ensuring that conversations remain contextually isolated and personalized.
+
+Python's global variables persist across the entire application, meaning they are shared among all users accessing the system. If we were to store conversation data in a global variable, user interactions could mix, leading to incorrect or misleading responses. For instance, if User 1 initiates a chat and User 2 starts a separate conversation, a globally stored variable could cause data overlap, breaking the logical flow and privacy of each user's chat session.
+
+
+
+
+What is RL and how does it help reasoning?
+
+RL stands for reinforcement learning, which is a type of machine learning where an agent learns to make decisions by performing actions and receiving rewards or penalties based on the outcomes of those actions. This process allows the agent to develop strategies to maximize cumulative rewards over time.
+
+In the context of reasoning, RL helps improve the capabilities of language models by enabling them to self-evolve and develop reasoning behaviors without relying on supervised data. Through large-scale reinforcement learning, models can refine their reasoning skills by iterating on their performance and adjusting based on feedback from the environment, leading to enhanced reasoning capabilities in tasks such as mathematics, coding, and scientific reasoning.
+
+
+What is the difference between DeepSeek-R1 and DeepSeek-R1-Zero?
+
+The difference between DeepSeek-R1 and DeepSeek-R1-Zero lies primarily in their approaches to reasoning and their performance:
+
+1. **Reasoning Approach**: 
+   - DeepSeek-R1-Zero utilizes reinforcement learning (RL) from a base model without any supervised fine-tuning, allowing it to evolve its reasoning capabilities autonomously. 
+   - In contrast, DeepSeek-R1 incorporates a small amount of high-quality data as a cold start, aiming to improve reasoning performance and convergence.
+
+2. **Performance**: 
+   - DeepSeek-R1-Zero demonstrates strong reasoning capabilities and can autonomously develop unexpected and powerful reasoning behaviors, but it struggles with issues such as poor readability and language mixing.
+   - DeepSeek-R1, built on insights from DeepSeek-R1-Zero, addresses these drawbacks and performs better in certain benchmarks, particularly in educational tasks, although it is slightly below OpenAI-o1-1217 on some metrics.
+
+3. **Target Audience**: 
+   - DeepSeek-R1 aims to create a more user-friendly model that can share its reasoning processes with the open community, whereas DeepSeek-R1-Zero focuses on showcasing advanced reasoning capabilities.
+
+Overall, DeepSeek-R1 builds upon the foundation established by DeepSeek-R1-Zero by incorporating additional strategies to enhance performance and accessibility.
+
+
+
+What is this paper about?
+I don't know the answer.
+
+What is DeepSeek_R1.pdf about?
+The document DeepSeek_R1.pdf provides an overview of the DeepSeek-R1 model, including its contributions, evaluation results, and performance benchmarks. It details the capabilities of DeepSeek-R1 in various reasoning tasks, comparisons with other models like DeepSeek-V3 and OpenAI-o1-1217, and its strengths in areas such as code competition, educational tasks, and instruction-following capabilities. The document also discusses the model's performance on specific benchmarks and its sensitivity to different prompting techniques. Additionally, it addresses limitations and outlines future improvements for the model.
+
+Does this application pass your vibe check? Are there any immediate pitfalls you're noticing?
+
+Aspect Tested: Lack of Response for General Paper Summary
+When asked “What is this paper about?”, the chatbot failed to provide an answer. However, when asked about “DeepSeek_R1.pdf”, it gave a detailed response.
+Potential Issue:
+o	The model might not be correctly handling vague or open-ended queries and requires precise document references.
+o	The retrieval system may be failing to fetch relevant chunks when the query lacks direct document identifiers.
+Recommended Fix:
+Consider a fallback strategy where the chatbot explicitly asks for clarification rather than failing.
